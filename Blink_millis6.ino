@@ -29,6 +29,15 @@ const uint8_t LED = 13;               // LED is connected to D13
 
 uint32_t blink_time;                  // Global variable to store the time that LED last changed state
 
+/*
+** Returns a boolean value that indicates whether the current time, t, is later than some prior 
+** time, t0, plus a given interval, dt.  The condition accounts for timer overflow / wraparound.
+*/
+bool it_is_time(uint32_t t, uint32_t t0, uint16_t dt) {
+  return ((t >= t0) && (t - t0 >= dt)) ||                   // The first disjunct handles the normal case
+            ((t < t0) && (t + (uint32_t)(~t0) + 1 >= dt));  //   while the second handles the overflow case
+}
+
 void setup() {
   pinMode(LED, OUTPUT);               // Configure LED pin as a digital output
   digitalWrite(LED, HIGH);            // Set LED high initially
@@ -39,9 +48,8 @@ void loop() {
   uint32_t t;                         // Local variable to store the current value of the millis timer
 
   t = millis();                       // Get the current value of the millis timer
-  if ((t >= blink_time + BLINK_INTERVAL) || ((t < blink_time) &&  // If BLINK_INTERVAL milliseconds have
-        (t + (uint32_t)(~blink_time) + 1 >= BLINK_INTERVAL))) {   //   elspsed since blink_time, 
-    digitalWrite(LED, !digitalRead(LED));   //   toggle the state of LED1 and
-    blink_time = t;                         //   set blink_time to the current millis timer value
+  if (it_is_time(t, blink_time, BLINK_INTERVAL)) {  // If BLINK_INTERVAL ms have elspsed since blink_time, 
+    digitalWrite(LED, !digitalRead(LED));           //   toggle the state of LED1 and
+    blink_time = t;                                 //   set blink_time to the current millis timer value
   }
 }
