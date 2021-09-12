@@ -39,7 +39,6 @@ String command = "";
 
 bool it_is_time(uint32_t t, uint32_t t0, uint16_t dt);
 bool str2hex(char *str, uint16_t *val);
-void hex2str(uint16_t val, char *str);
 
 void setup() {
   pinMode(GREEN_LED, OUTPUT);         // Configure GREEN_LED pin as a digital output
