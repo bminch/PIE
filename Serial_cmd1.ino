@@ -41,7 +41,6 @@ char cmd_buffer[CMD_BUFFER_LEN];
 
 bool it_is_time(uint32_t t, uint32_t t0, uint16_t dt);
 bool str2hex(char *str, uint16_t *val);
-void hex2str(uint16_t val, char *str);
 
 void setup() {
   pinMode(GREEN_LED, OUTPUT);         // Configure GREEN_LED pin as a digital output
@@ -98,47 +97,40 @@ void loop() {
 
 void parse_cmd_buffer() {
   uint16_t val;
-  char str[5];
 
   //Serial.print("[");
   //Serial.print(cmd_buffer);
   //Serial.print("]\r\n");
 
   if (strcmp(cmd_buffer, "GREEN?") == 0) {
-    hex2str(green_interval, str);
-    Serial.print(str);
+    Serial.print(green_interval, HEX);
     Serial.print("\r\n");
   } else if (strncmp(cmd_buffer, "GREEN!", 6) == 0) {
     if (str2hex(cmd_buffer + 6, &val)) {
       green_interval = (val < GREEN_PERIOD) ? val : GREEN_PERIOD;
     }
   } else if (strcmp(cmd_buffer, "YELLOW?") == 0) {
-    hex2str(yellow_interval, str);
-    Serial.print(str);
+    Serial.print(yellow_interval, HEX);
     Serial.print("\r\n");
   } else if (strncmp(cmd_buffer, "YELLOW!", 7) == 0) {
     if (str2hex(cmd_buffer + 7, &val)) {
       yellow_interval = (val < YELLOW_INTERVAL_MAX) ? val : YELLOW_INTERVAL_MAX;
     }
   } else if (strcmp(cmd_buffer, "RED?") == 0) {
-    hex2str(digitalRead(RED_LED), str);
-    Serial.print(str);
+    Serial.print(digitalRead(RED_LED), HEX);
     Serial.print("\r\n");
   } else if (strncmp(cmd_buffer, "RED!", 4) == 0) {
     if (str2hex(cmd_buffer + 4, &val)) {
       digitalWrite(RED_LED, val ? HIGH : LOW);
     }
   } else if (strcmp(cmd_buffer, "SW1?") == 0) {
-    hex2str(digitalRead(SW1), str);
-    Serial.print(str);
+    Serial.print(digitalRead(SW1), HEX);
     Serial.print("\r\n");
   } else if (strcmp(cmd_buffer, "SW2?") == 0) {
-    hex2str(digitalRead(SW2), str);
-    Serial.print(str);
+    Serial.print(digitalRead(SW2), HEX);
     Serial.print("\r\n");
   } else if (strcmp(cmd_buffer, "POT?") == 0) {
-    hex2str(analogRead(POT), str);
-    Serial.print(str);
+    Serial.print(analogRead(POT), HEX);
     Serial.print("\r\n");
   }
 }
@@ -186,29 +178,4 @@ bool str2hex(char *str, uint16_t *val) {
   }
 
   return true;
-}
-
-/*
-** Converts a 16-bit unsigned integer, val, into a null-terminated, C-style 
-** string that reflects the hex representation of the val.  The resulting 
-** string is returned via call by reference via the str parameter.
-*/
-void hex2str(uint16_t val, char *str) {
-  uint16_t digit, pos = 0, i;
-  bool hit_nonzero_digit = false;
-
-  for (i = 0; i < 4; i++) {
-    digit = val >> 12;
-    hit_nonzero_digit = (digit > 0);
-    if (hit_nonzero_digit || (i == 3)) {
-      if (digit < 10) {
-        str[pos] = '0' + (uint8_t)digit;
-      } else {
-        str[pos] = 'A' + (uint8_t)digit - 10;
-      }
-      pos++;
-    }
-    val = (val & 0x0FFF) << 4;
-  }
-  str[pos] = '\0';
 }

@@ -95,40 +95,34 @@ void parse_command() {
   //Serial.print("]\r\n");
 
   if (command.equals("GREEN?")) {
-    String str = String(green_interval, HEX);
-    Serial.print(str);
+    Serial.print(green_interval, HEX);
     Serial.print("\r\n");
   } else if (command.startsWith("GREEN!")) {
     if (str2hex(command.substring(6), &val)) {
       green_interval = (val < GREEN_PERIOD) ? val : GREEN_PERIOD;
     }
   } else if (command.equals("YELLOW?")) {
-    String str = String(yellow_interval, HEX);
-    Serial.print(str);
+    Serial.print(yellow_interval, HEX);
     Serial.print("\r\n");
   } else if (command.startsWith("YELLOW!")) {
     if (str2hex(command.substring(7), &val)) {
       yellow_interval = (val < YELLOW_INTERVAL_MAX) ? val : YELLOW_INTERVAL_MAX;
     }
   } else if (command.equals("RED?")) {
-    String str = String(digitalRead(RED_LED), HEX);
-    Serial.print(str);
+    Serial.print(digitalRead(RED_LED), HEX);
     Serial.print("\r\n");
   } else if (command.startsWith("RED!")) {
     if (str2hex(command.substring(4), &val)) {
       digitalWrite(RED_LED, val ? HIGH : LOW);
     }
   } else if (command.equals("SW1?")) {
-    String str = String(digitalRead(SW1), HEX);
-    Serial.print(str);
+    Serial.print(digitalRead(SW1), HEX);
     Serial.print("\r\n");
   } else if (command.equals("SW2?")) {
-    String str = String(digitalRead(SW2), HEX);
-    Serial.print(str);
+    Serial.print(sdigitalRead(SW2), HEX);
     Serial.print("\r\n");
   } else if (command.equals("POT?")) {
-    String str = String(analogRead(POT), HEX);
-    Serial.print(str);
+    Serial.print(analogRead(POT), HEX);
     Serial.print("\r\n");
   }
 }
