@@ -140,8 +140,8 @@ void parse_cmd_buffer() {
 ** time, t0, plus a given interval, dt.  The condition accounts for timer overflow / wraparound.
 */
 bool it_is_time(uint32_t t, uint32_t t0, uint16_t dt) {
-  return ((t >= t0) && (t - t0 >= dt)) ||                   // The first disjunct handles the normal case
-            ((t < t0) && (t + (uint32_t)(~t0) + 1 >= dt));  //   while the second handles the overflow case
+  return ((t >= t0) && (t - t0 >= dt)) ||         // The first disjunct handles the normal case
+            ((t < t0) && (t + (~t0) + 1 >= dt));  //   while the second handles the overflow case
 }
 
 /*
