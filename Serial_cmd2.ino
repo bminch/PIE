@@ -119,7 +119,7 @@ void parse_command() {
     Serial.print(digitalRead(SW1), HEX);
     Serial.print("\r\n");
   } else if (command.equals("SW2?")) {
-    Serial.print(sdigitalRead(SW2), HEX);
+    Serial.print(digitalRead(SW2), HEX);
     Serial.print("\r\n");
   } else if (command.equals("POT?")) {
     Serial.print(analogRead(POT), HEX);
